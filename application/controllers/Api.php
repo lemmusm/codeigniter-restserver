@@ -33,15 +33,6 @@ class Api extends RestController
     // REGISTER
     public function usuarios_post()
     {
-        // Send data by x-www-form-urlencoded
-        /* $data = array(
-            //db_field_name => $this->input->post('form_name'),
-            'nombre' => $this->input->post('nombre', TRUE),
-            'correo' => $this->input->post('correo', TRUE),
-            'tipo_usuario_id' => 2
-        ); */
-        
-        // Send data by json
         $data_form = file_get_contents('php://input');
         $data = json_decode($data_form);
 

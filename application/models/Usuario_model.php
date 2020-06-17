@@ -43,12 +43,13 @@ class Usuario_model extends CI_Model
     // UPDATE
     public function updateUser($id, $data)
     {
-        $query = $this->db->update('usuario', $data, array('id' => $id));
-
-        if ($query) {
+        $this->db->where('id', $id);
+        $query = $this->db->get("usuario");
+        if ($query->num_rows() > 0) {
+            $query = $this->db->update('usuario', $data, array('id' => $id));
             return 'Data was updated successfully';
         } else {
-            return "Error has occured";
+            return "Error has occured, user not found!";
         }
     }
 
@@ -56,12 +57,13 @@ class Usuario_model extends CI_Model
     public function deleteUser($id)
     {
         $this->db->where('id', $id);
-        $query = $this->db->delete('usuario');
-        //Insert data to database
-        if ($query) {
+        $query = $this->db->get("usuario");
+        if ($query->num_rows() > 0) {
+            $this->db->where('id', $id);
+            $query = $this->db->delete('usuario');
             return 'Data was deleted successfully';
         } else {
-            return "Error has occured";
+            return "Error has occured, user not found!";
         }
     }
 }
