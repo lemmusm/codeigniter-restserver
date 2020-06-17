@@ -1,16 +1,70 @@
 <?php
+use chriskacerguis\RestServer\RestController;
 
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Api extends CI_Controller {
+require APPPATH . '/libraries/RestController.php';
+require APPPATH . '/libraries/Format.php';
 
-   public function __construct()
-   {
-      parent::__construct();
-   }
+class Api extends RestController
+{
+    public function __construct()
+    {
+        // Construct the parent class
+        parent::__construct();
+        
+        $this->load->model('Usuario_model');
+    }
 
-   public function index()
-	{
-		$this->load->view('welcome_message');
-	}
+    
+    // SHOW ALL AND BY ID
+    public function usuarios_get()
+    {
+        $id = $this->uri->segment(3);
+
+        if (is_null($id)) {
+            $res = $this->Usuario_model->getUsers();
+        } else {
+            $res = $this->Usuario_model->getUser($id);
+        }
+        $this->response($res);
+    }
+
+    // REGISTER
+    public function usuarios_post()
+    {
+        // Send data by x-www-form-urlencoded
+        /* $data = array(
+            //db_field_name => $this->input->post('form_name'),
+            'nombre' => $this->input->post('nombre', TRUE),
+            'correo' => $this->input->post('correo', TRUE),
+            'tipo_usuario_id' => 2
+        ); */
+        
+        // Send data by json
+        $data_form = file_get_contents('php://input');
+        $data = json_decode($data_form);
+
+        $res = $this->Usuario_model->postUsers($data);
+        $this->response($res);
+    }
+
+    // UPDATE
+    public function usuarios_put()
+    {
+        $id = $this->uri->segment(3);
+        $data_form = file_get_contents('php://input');
+        $data = json_decode($data_form);
+
+        $res = $this->Usuario_model->updateUser($id, $data);
+        $this->response($res);
+    }
+
+    // DELETE
+    public function usuarios_delete()
+    {
+        $id = $this->uri->segment(3);
+        $res = $this->Usuario_model->deleteUser($id);
+        $this->response($res);
+    }
 }
