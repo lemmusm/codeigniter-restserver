@@ -33,8 +33,8 @@ class Usuario_model extends CI_Model
     public function postUsers($data)
     {
         //Insert data to database
-        if ($query = $this->db->insert('usuario', $data)) {
-            return 'Data is inserted successfully';
+        if ($this->db->insert('usuario', $data)) {
+            return 'Data was inserted successfully';
         } else {
             return "Error has occured";
         }
