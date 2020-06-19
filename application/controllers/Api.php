@@ -13,49 +13,132 @@ class Api extends RestController
         // Construct the parent class
         parent::__construct();
         
-        $this->load->model('Usuario_model');
+        $this->load->model('usuario_model');
+        $this->load->model('ciudadano_model');
+        $this->load->model('pago_model');
     }
 
+    /*****************************  SECCION USUARIOS *****************************/
     
-    // SHOW ALL AND BY ID
-    public function usuarios_get()
+    public function usuario_post()
+    {
+        $data_form = file_get_contents('php://input');
+        $data = json_decode($data_form);
+
+        $res = $this->usuario_model->postUsers($data);
+        $this->response($res);
+    }
+    
+    public function usuario_get()
     {
         $id = $this->uri->segment(3);
 
         if (is_null($id)) {
-            $res = $this->Usuario_model->getUsers();
+            $res = $this->usuario_model->getUsers();
         } else {
-            $res = $this->Usuario_model->getUser($id);
+            $res = $this->usuario_model->getUser($id);
         }
         $this->response($res);
     }
 
-    // REGISTER
-    public function usuarios_post()
+    public function usuario_put()
+    {
+        $id = $this->uri->segment(3);
+
+        $data_form = file_get_contents('php://input');
+        $data = json_decode($data_form);
+
+        $res = $this->usuario_model->updateUser($id, $data);
+        $this->response($res);
+    }
+
+    public function usuario_delete()
+    {
+        $id = $this->uri->segment(3);
+        $res = $this->usuario_model->deleteUser($id);
+        $this->response($res);
+    }
+
+    /*****************************  SECCION CIUDADANO *****************************/
+
+    public function ciudadano_post()
     {
         $data_form = file_get_contents('php://input');
         $data = json_decode($data_form);
 
-        $res = $this->Usuario_model->postUsers($data);
+        $res = $this->ciudadano_model->registerCiudadano($data);
         $this->response($res);
     }
 
-    // UPDATE
-    public function usuarios_put()
+    public function ciudadano_get()
+    {
+        $id = $this->uri->segment(3);
+
+        if (is_null($id)) {
+            $res = $this->ciudadano_model->getCiudadanos();
+        } else {
+            $res = $this->ciudadano_model->getCiudadano($id);
+        }
+        $this->response($res);
+    }
+
+    public function ciudadano_put()
+    {
+        $id = $this->uri->segment(3);
+
+        $data_form = file_get_contents('php://input');
+        $data =  json_decode($data_form);
+
+        $res = $this->ciudadano_model->updateCiudadano($id, $data);
+        $this->response($res);
+    }
+
+    public function ciudadano_delete()
+    {
+        $id = $this->uri->segment(3);
+
+        $res = $this->ciudadano_model->deleteCiudadano($id);
+        $this->response($res);
+    }
+
+    /*****************************  SECCION PAGOS *****************************/
+
+    public function pago_post()
+    {
+        $data_form = file_get_contents('php://input');
+        $data = json_decode($data_form);
+    
+        $res = $this->pago_model->registerPago($data);
+        $this->response($res);
+    }
+
+    public function pago_get()
+    {
+        $id = $this->uri->segment(3);
+
+        if (is_null($id)) {
+            $res = $this->pago_model->getPagos();
+        } else {
+            $res = $this->pago_model->getPago($id);
+        }
+        $this->response($res);
+    }
+
+    public function pago_put()
     {
         $id = $this->uri->segment(3);
         $data_form = file_get_contents('php://input');
         $data = json_decode($data_form);
 
-        $res = $this->Usuario_model->updateUser($id, $data);
+        $res = $this->pago_model->updatePago($id, $data);
         $this->response($res);
     }
-
-    // DELETE
-    public function usuarios_delete()
+    
+    public function pago_delete()
     {
         $id = $this->uri->segment(3);
-        $res = $this->Usuario_model->deleteUser($id);
+
+        $res = $this->pago_model->deletePago($id);
         $this->response($res);
     }
 }
